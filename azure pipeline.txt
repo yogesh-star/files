@@ -1,0 +1,747 @@
+cd /srv/builds; ls -t /srv/builds | awk 'NR>4' | sudo xargs rm -rf
+
+sudo mkdir -p /srv/builds/$(Build.BuildId)
+
+
+
+
+nodejs and npm 
+pm2 (to keep backend running)
+nginx 
+
+
+
+You may also need development tools to build native addons:
+     sudo apt-get install gcc g++ make
+## To install the Yarn package manager, run:
+     curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+     echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+     sudo apt-get update && sudo apt-get install yarn
+
+
+https://github.com/nodejs/help/issues/1846
+
+rm -rf node_modules
+npm install -g npm@latest
+npm i core-util-is
+
+
+npm install
+pm2 start app.js
+
+
+--unsafe-perm
+
+Traffic
+web app
+
+docker ps -a --filter ancestor=ubuntu | awk 'NR>2' | xargs docker rm
+                                     
+docker ps --filter "status=exited" | awk 'NR>2' | xargs --no-run-if-empty docker rm
+
+docker container rm $(docker container ls –aq)
+
+docker system prune
+
+
+/var/log/nginx/* {
+weekly
+create 0644 root root
+rotate 5
+size 1M
+compress
+olddir /mnt/test/
+notifempty
+}
+
+
+./run.sh
+
+
+
+
+
+sudo mkdir actions-runner
+            cd actions-runner
+           sudo curl -O -L https://github.com/actions/runner/releases/download/v2.262.1/actions-runner-linux-x64-2.262.1.tar.gz
+           sudo tar xzf ./actions-runner-linux-x64-2.262.1.tar.gz
+            PAT=<Super Secret PAT>
+            token=$(curl -s -XPOST \
+                -H "authorization: token $PAT" \
+                https://api.github.com/repos/yg57404/test-runner/actions/runners/registration-token |\
+                jq -r .token)
+            sudo chown ec2-user -R /actions-runner
+            ./config.sh --url https://github.com/<GitHub_User>/<GitHub_Repo> --token $token --name "my-runner-$(hostname)" --work _work
+            sudo ./svc.sh install
+            sudo ./svc.sh start
+            sudo chown ec2-user -R /actions-runner
+
+
+resource_group_name = azurerm_resource_group.myterraformgroup.name
+
+var.subnet_prefix[count.index]
+
+$? command means  (exit status)
+
+file module for directory;
+uri mode
+
+
+
+export token=$(curl -s -XPOST \
+                -H "authorization: token $PAT" \
+                https://api.github.com/repos/<GitHub_User>/<GitHub_Repo>/actions/runners/registration-token |\
+                jq -r .token)
+
+
+f80605e20dc4ffbe2a1487d41113877ae7b30e3c 
+
+export VER="1.5.6"
+wget https://releases.hashicorp.com/packer/${VER}/packer_${VER}_linux_amd64.zip
+sudo apt install unzip
+unzip packer_${VER}_linux_amd64.zip
+sudo mv packer /usr/local/bin
+packer version
+
+give access tp personal access token
+
+
+etc/cron.d/docker
+
+
+
+
+
+"client_id": "058f9bb1-7c01-447d-a578-cadf4d1b3b56",
+  "client_secret": "MQ1o9fnf5hPTW6XxXq.fhkN7~692LWjnaZ",
+  "tenant_id": "9091a7cf-0fad-4a79-ac90-23557fea7d61"
+}
+ubuntu@testing:~$ az account show --query "{ subscription_id: id }"
+{
+  "subscription_id": "456385ad-3864-4a73-8216-abee2ac6e768"
+
+
+
+
+  Task Update:-
+                try to install deploymnet group agent on vmss.
+                
+
+
+mkdir azagent;
+cd azagent;
+curl -fkSL -o vstsagent.tar.gz https://vstsagentpackage.azureedge.net/agent/2.183.1/vsts-agent-linux-x64-2.183.1.tar.gz;tar -zxvf vstsagent.tar.gz;
+ if [ -x "$(command -v systemctl)" ]; 
+then ./config.sh --deploymentgroup --deploymentgroupname "dg1" --acceptteeeula --agent $HOSTNAME --url https://dev.azure.com/yogesh0904/ --work _work --projectname 'mearn' --auth PAT --token opxspfinlcgivqwobleyhisq3tqv5nkrnmjcdcsis2nnp3miujpa --runasservice;
+sudo ./svc.sh install; 
+sudo ./svc.sh start; 
+else ./config.sh --deploymentgroup --deploymentgroupname "dg1" --acceptteeeula --agent $HOSTNAME --url https://dev.azure.com/yogesh0904/ --work _work --projectname 'mearn' --auth PAT --token opxspfinlcgivqwobleyhisq3tqv5nkrnmjcdcsis2nnp3miujpa; ./run.sh; fi  
+
+
+
+mkdir /opt/azagent
+cd /opt/azagent && curl -fkSL -o vstsagent.tar.gz https://vstsagentpackage.azureedge.net/agent/2.183.1/vsts-agent-linux-x64-2.183.1.tar.gz
+cd /opt/azagent && tar -zxvf vstsagent.tar.gz
+sudo chmod o+w /opt/azagent
+cd /opt/azagent && su ubuntu -c './config.sh --deploymentgroup --deploymentgroupname "dg1" --acceptteeeula --agent $HOSTNAME --url https://dev.azure.com/yogesh0904/ --work _work --projectname 'mearn' --auth PAT --token opxspfinlcgivqwobleyhisq3tqv5nkrnmjcdcsis2nnp3miujpa --runasservice'
+cd /opt/azagent && ./svc.sh install
+cd /opt/azagent && ./svc.sh start
+              
+
+
+
+terraform plan -var-file=terraform.tfvars
+
+
+export for organiztion
+
+az network vnet create \
+  --name epifivnet1 \
+  --resource-group RunnerResourceGroup \
+  --address-prefix 10.0.0.0/16 
+
+  az network vnet subnet create \
+  --address-prefix 10.0.2.0/24 \
+  --name epifiSubnetw \
+  --vnet-name epifivnet1 \
+  --resource-group RunnerResourceGroup
+
+
+  az network vnet create -g RunnerResourceGroup -n epifivnet --address-prefix 10.0.0.0/16 --subnet-name epifiSubnet --subnet-prefix 10.0.1.0/24
+
+
+../scripts/playbook.yml
+
+Topic:-
+
+Tenant 
+Can you identify which Azure Service uses autoscale?:- Azure Monitor.
+
+
+
+
+
+
+
+
+
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+  displayName: 'npm install and build'
+
+- task: CopyFiles@2
+  displayName: 'Copy File to: $(TargetFolder)'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: |
+     **/* 
+    TargetFolder: '$(System.DefaultWorkingDirectory)/pipeline-artifacts/'
+    flattenFolders: true
+
+- task: AzureImageBuilderTask@1
+  displayName: 'Azure VM Image Builder Task'
+  inputs:
+    managedIdentity: '/subscriptions/456385ad-3864-4a73-8216-abee2ac6e768/resourcegroups/myVMSSResourceGroup/providers/Microsoft.ManagedIdentity/userAssignedIdentities/myVMSSIdentity'
+    imageSource: 'marketplace'
+    packagePath: '$(System.DefaultWorkingDirectory)/pipeline-artifacts'
+    inlineScript: |
+      curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+      sudo apt-get install -y nodejs
+      curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+      echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+      sudo apt-get update && sudo apt-get install yarn -y
+      sudo apt-get install gcc g++ make -y
+      sudo npm install pm2 -g
+      sudo mkdir /lib/buildArtifacts
+      sudo cp  "/tmp/pipeline-artifacts.tar.gz" /lib/buildArtifacts/.
+      cd /lib/buildArtifacts/.
+      sudo tar -zxvf pipeline-artifacts.tar.gz
+    storageAccountName: 'vmssstorageaccount22'
+    distributeType: 'sig'
+    galleryImageId: '/subscriptions/456385ad-3864-4a73-8216-abee2ac6e768/resourceGroups/myVMSSResourceGroup/providers/Microsoft.Compute/galleries/myVMSSGallery/images/MyImage/versions/0.0.$(Build.BuildId)'
+    replicationRegions: 'eastus2'
+    ibSubscription: 'squareops-tech-subscription(456385ad-3864-4a73-8216-abee2ac6e768)'
+    ibAzureResourceGroup: 'myVMSSResourceGroup'
+    ibLocation: 'eastus2'
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: 'squareops-tech-subscription(2)(456385ad-3864-4a73-8216-abee2ac6e768)'
+    scriptType: 'pscore'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az vmss update --resource-group myVMSSResourceGroup --name vmss --set virtualMachineProfile.storageProfile.imageReference.id=/subscriptions/456385ad-3864-4a73-8216-abee2ac6e768/resourceGroups/myVMSSResourceGroup/providers/Microsoft.Compute/galleries/myVMSSGallery/images/MyImage/versions/0.0.$(Build.BuildId)
+      az vmss update-instances --resource-group myVMSSResourceGroup --name vmss --instance-ids "*"
+
+
+
+az image delete --name backend-imagesss-centralindia --resource-group terraformbackendresourcegroup
+
+runner vm group,disk size,file permissions,vnet using terraform
+
+nsg id 
+custom data path
+../../scripts
+
+az storage blob download --account-name epifitfisa1 --container-name backend --name $(Build.BuildId).zip --file $(Build.BuildId).zip
+
+
+
+That ELB has name was similar like faisal ELB which was created last day that why i deleted my mistake. 
+
+/subscriptions/456385ad-3864-4a73-8216-abee2ac6e768/resourceGroups/myResourceGroup/providers/Microsoft.Network/networkProfiles/aci-network-profile-myVNet-myACISubnet
+
+kubectl
+helm
+
+
+
+
+ 
+rollout for deployment   "kubectl rollout undo --to-revision=2 deploment firstdeploy" 
+
+
+
+
+
+
+namespace and how to create "kubectl apply -f pod.yml --namespace test" dns service namespace.
+ingress controller.
+
+az aks create \
+  --resource-group myResourceGroup \
+  --name myAKSCluster \
+  --node-count 1 \
+  --vm-set-type VirtualMachineScaleSets \
+  --load-balancer-sku standard \
+  --enable-cluster-autoscaler \
+  --min-count 1 \
+  --max-count 3
+Standard_B1s
+
+  yg57404@123
+
+  bitnami https://charts.bitnami.com/bitnami
+
+
+  node groups and labels              kubectl label nodes aks-nodepool1-15697065-vmss000000 size=large 
+
+helm install cert-manager jetstack/cert-manager \
+  --namespace cattle-system  \
+  --set installCRDs=true \
+  --set nodeSelector."kubernetes\.io/os"=linux \
+  --set webhook.nodeSelector."kubernetes\.io/os"=linux \
+  --set cainjector.nodeSelector."kubernetes\.io/os"=linux
+
+helm upgrade --install bigid-release compose/helm.v3 --set global.image.repository=5072 --set global.mongodb.externalIP=18.158.60.177 --set global.bigid.ner.create=true --set global.ingress.bigidHost=test.squareops.xyz --set global.ingress.rabbitmqHost=test1.squareops.xyz --set global.imageCredentials.username=anand91073 --set global.imageCredentials.password=Redhat#@1234 -f compose/helm/values.yaml
+
+helm install bigid-release . --set global.image.repository=bigidapps.azurecr.io --set global.mongodb.externalIP=10.0.2.4 --set global.bigid.ner.create=true --set global.ingress.bigidHost=test.squareops.xyz --set global.ingress.rabbitmqHost=test1.squareops.xyz --set global.imageCredentials.username=00000000-0000-0000-0000-000000000000 --set global.imageCredentials.password='eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjQ1NlA6WjNCRjpCQ0tPOkpUN0w6MlNLSTpVQUpZOkRCSU46VU5KWTpHWUZHOjdMQTI6WUpNSzpWUkVaIn0.eyJqdGkiOiJiYThhMzgyNC04OWNhLTRiMGItYmRkZi1lZjQ0NWJmNjc4MjYiLCJzdWIiOiJFbGlhcy5EYW1hc3Rpb3Rpc0BuZXBob3N0ZWNobm9sb2dpZXMuY29tIiwibmJmIjoxNjIwOTc3MDM3LCJleHAiOjE2MjA5ODg3MzcsImlhdCI6MTYyMDk3NzAzNywiaXNzIjoiQXp1cmUgQ29udGFpbmVyIFJlZ2lzdHJ5IiwiYXVkIjoiYmlnaWRhcHBzLmF6dXJlY3IuaW8iLCJ2ZXJzaW9uIjoiMS4wIiwicmlkIjoiNWVkZTA0M2ZiOGYwNDQzODlhMjYxYWI5MWU0ODc3ZTciLCJncmFudF90eXBlIjoicmVmcmVzaF90b2tlbiIsImFwcGlkIjoiMDRiMDc3OTUtOGRkYi00NjFhLWJiZWUtMDJmOWUxYmY3YjQ2IiwidGVuYW50IjoiOTI0OTEwYzYtMDkwYi00MzY1LWE0ZDctZTM0OTY2OTM1NTljIiwicGVybWlzc2lvbnMiOnsiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiLCJkZWxldGUiXSwibm90QWN0aW9ucyI6bnVsbH0sInJvbGVzIjpbXX0.4gDjowZjV7zRQsQuP3Eu11JkgkAI_S3e_rWGNuFmz4zRuSupxLohQ6-jz07fzusym2WcATO4ZKxwjGBhIR6n3JUf8PoPXdEwyQy28tHvigDUxkuwupfE5fKc6fX_Wr4he_2vbwPUD-dv0j90h_SzTnj1jAVFB3970e7327s8G8KllAlBS8QYLd2B7Dzb0tdcW776m31BfTw1hatLjgnU7bu_mmtIXnU-_uWazU0bfdKMlJyrfy4QgQWW8tnuvsKRawPgq92YedRlPWj1jwO0_MHLc_VnNNbRcn0ESxHpb8mLUiH8Yo6FaX3EZ2Efmfn58zcrotiwYSkV1lAaCVRtVg' -f values.yaml
+
+
+ "accessToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjQ1NlA6WjNCRjpCQ0tPOkpUN0w6MlNLSTpVQUpZOkRCSU46VU5KWTpHWUZHOjdMQTI6WUpNSzpWUkVaIn0.eyJqdGkiOiJiYThhMzgyNC04OWNhLTRiMGItYmRkZi1lZjQ0NWJmNjc4MjYiLCJzdWIiOiJFbGlhcy5EYW1hc3Rpb3Rpc0BuZXBob3N0ZWNobm9sb2dpZXMuY29tIiwibmJmIjoxNjIwOTc3MDM3LCJleHAiOjE2MjA5ODg3MzcsImlhdCI6MTYyMDk3NzAzNywiaXNzIjoiQXp1cmUgQ29udGFpbmVyIFJlZ2lzdHJ5IiwiYXVkIjoiYmlnaWRhcHBzLmF6dXJlY3IuaW8iLCJ2ZXJzaW9uIjoiMS4wIiwicmlkIjoiNWVkZTA0M2ZiOGYwNDQzODlhMjYxYWI5MWU0ODc3ZTciLCJncmFudF90eXBlIjoicmVmcmVzaF90b2tlbiIsImFwcGlkIjoiMDRiMDc3OTUtOGRkYi00NjFhLWJiZWUtMDJmOWUxYmY3YjQ2IiwidGVuYW50IjoiOTI0OTEwYzYtMDkwYi00MzY1LWE0ZDctZTM0OTY2OTM1NTljIiwicGVybWlzc2lvbnMiOnsiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiLCJkZWxldGUiXSwibm90QWN0aW9ucyI6bnVsbH0sInJvbGVzIjpbXX0.4gDjowZjV7zRQsQuP3Eu11JkgkAI_S3e_rWGNuFmz4zRuSupxLohQ6-jz07fzusym2WcATO4ZKxwjGBhIR6n3JUf8PoPXdEwyQy28tHvigDUxkuwupfE5fKc6fX_Wr4he_2vbwPUD-dv0j90h_SzTnj1jAVFB3970e7327s8G8KllAlBS8QYLd2B7Dzb0tdcW776m31BfTw1hatLjgnU7bu_mmtIXnU-_uWazU0bfdKMlJyrfy4QgQWW8tnuvsKRawPgq92YedRlPWj1jwO0_MHLc_VnNNbRcn0ESxHpb8mLUiH8Yo6FaX3EZ2Efmfn58zcrotiwYSkV1lAaCVRtVg",
+  "loginServer": "bigidapps.azurecr.io"
+
+  00000000-0000-0000-0000-000000000000
+
+
+
+bitnami         https://charts.bitnami.com/bitnami
+stable          https://charts.helm.sh/stable
+svc-cat         https://kubernetes-sigs.github.io/service-catalog
+ingress-nginx   https://kubernetes.github.io/ingress-nginx
+jetstack        https://charts.jetstack.io
+rancher-latest  https://releases.rancher.com/server-charts/latest
+rancher-stable  https://releases.rancher.com/server-charts/stable
+
+
+
+helm upgrade cert-manager-resources mojanalytics/cert-manager-resources --install
+feat: create a services for installing cluster services using helm using terraform
+
+create chart for cluster issuer,to install using helm tf resources.
+clean up infra directory
+
+ cp terraform{,.tmp}.tfvars
+ 
+ The login server endpoint suffix '.azurecr.io' is automatically omitted.
+You can perform manual login using the provided access token below, for example: 'docker login loginServer -u 00000000-0000-0000-0000-000000000000 -p accessToken'
+{
+  "accessToken": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjQ1NlA6WjNCRjpCQ0tPOkpUN0w6MlNLSTpVQUpZOkRCSU46VU5KWTpHWUZHOjdMQTI6WUpNSzpWUkVaIn0.eyJqdGkiOiIwZTdhNWVmNy0wYjc5LTQyYmItOGMwMS05NjkwMGZlZTEzOWIiLCJzdWIiOiJFbGlhcy5EYW1hc3Rpb3Rpc0BuZXBob3N0ZWNobm9sb2dpZXMuY29tIiwibmJmIjoxNjIxODQ3Nzk0LCJleHAiOjE2MjE4NTk0OTQsImlhdCI6MTYyMTg0Nzc5NCwiaXNzIjoiQXp1cmUgQ29udGFpbmVyIFJlZ2lzdHJ5IiwiYXVkIjoiYmlnaWRhcHBzLmF6dXJlY3IuaW8iLCJ2ZXJzaW9uIjoiMS4wIiwicmlkIjoiNWVkZTA0M2ZiOGYwNDQzODlhMjYxYWI5MWU0ODc3ZTciLCJncmFudF90eXBlIjoicmVmcmVzaF90b2tlbiIsImFwcGlkIjoiMDRiMDc3OTUtOGRkYi00NjFhLWJiZWUtMDJmOWUxYmY3YjQ2IiwidGVuYW50IjoiOTI0OTEwYzYtMDkwYi00MzY1LWE0ZDctZTM0OTY2OTM1NTljIiwicGVybWlzc2lvbnMiOnsiYWN0aW9ucyI6WyJyZWFkIiwid3JpdGUiLCJkZWxldGUiXSwibm90QWN0aW9ucyI6bnVsbH0sInJvbGVzIjpbXX0.rnbg8zb_E-pDDZIgtNM5FN_3x5cJQ9K06dNJIJq4oGjYqiiFTI6jockLdDEXW9X8Jx1pTg2A9L4WLmQH9PAU1lRSS5HQqvp-68NUEDWFQElyd8nV8oHUsR8zqUAqr8Kdo1iBWZhKtLHtzD5TgreGtyJ5kSl9wITqgIeUYWykkA-5LSK9fyQMEh6UV9-VcLR9wb8E4fLRw-jxwCBTZjSwpj7V3dnTCouET1ipYbpPbMJasThkvkdMzA99ShHzTyd7OXtbWBFHm1lKP5-OJGMMD8IDujrL8mxYJvs1vIe56zi8uqFtLee2EQdQEOjfWxCUpsp6t4FksJL14cWwF0f1tA",
+  "loginServer": "bigidapps.azurecr.io"
+}
+
+
+
+
+
+
+mysql  
+1. init script(when boot mysql, like create user, db,tables) (init script pass through configmap-init.yaml) it uses initdb.sql(config map)
+2. statefulsets created
+3. volumeMounts:
+            - name: mysql-initdb
+              mountPath: /docker-entrypoint-initdb.d: :- uisng this path run init script 
+
+mongo:
+1. same as mysql configmap for init script it use .js  
+2. mongoexress  mongo endpoint make: pods.service.ns. svc.cluster.local (dns service)
+3. same as mysql mount path 
+
+releated to machine learning
+spark cluster using for Machine laerning jobs run.
+apache livy  intreaction with spark
+jupiterhub:   jupiter notebook(line wise line ru code) in hub buddlen jupiter notebooks -intergrate with azure ad (Outh authentication)
+
+jupiterhub jobs run on spark cluster 
+
+keycloak:
+using IAM in kubernates. authenticaton for appliaction. entry in application through keycloak.
+
+
+Monitoring Tools:
+
+prometheus: send logs 
+loki : send logs
+
+garfana : Dashboard (GUI interface) visualisation.
+
+istio:
+service to service communication. 
+use as ingress.
+traafic using proxy service to service.  
+
+Internal Loadbalancer:
+permission: --add role assigmnet network contributor to cluster.
+annoataion: service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+
+
+Azure Devops:
+
+container resgistry define
+namespace 
+dockerfile build
+
+Stage build:
+ task: Docker@2
+    command: buildAndPush   (build images and push acr) 
+    tag: from global variable.
+
+Stage Deploy:
+   deploy to aks
+
+   task: kubernatesManifest@0
+   create service connection for kubernates cluster.
+   container uses images from globalvaiable from build stage
+
+
+ 
+
+kubectl apply -f https://raw.githubusercontent.com/mongodb/mongodb-kubernetes-operator/master/config/crd/bases/mongodbcommunity.mongodb.com_mongodbcommunity.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/mongodb/mongodb-kubernetes-operator/master/config/manager/manager.yaml
+
+
+https://github.com/presslabs/mysql-operator
+
+helm repo add presslabs https://presslabs.github.io/charts
+helm install mysql-operator  presslabs/mysql-operator
+
+
+ ${path.module}/ module.eks.cluster_id ssh-key.pem
+
+
+   openditro clustyer name 
+
+  comment for vpc subnet multi-az
+  ebs false
+  rancher pod exec
+
+  scp -r -i test.pem /home/ubuntu/* root@13.126.28.78:/home/ubuntu/old-server
+
+
+  LbMUP2JJtXuwSY4-xG-T
+
+  aws eks update-kubeconfig --name test-demo-10-06--region us-east-2
+  kubectl --kubeconfig ~/.kube/config -n cattle-system exec $(kubectl --kubeconfig ~/.kube/config -n cattle-system get pods -l app=rancher | grep '1/1' | head -1 | awk '{ print $1 }') -- reset-password
+  
+
+  now, currently working on output.tf, i have got error when we set to flase services it show error "empty tuples" in outputs. 
+
+# output "Grafana" {
+#   description = "garfana_password"
+#   value       = { 
+#     username = "${module.prometheus[0].garfana_user}",
+#     password = "${module.prometheus[0].garfana_password}" ,
+#     url = var.grafana_hostname             
+#   }
+# }
+
+
+
+git pull origin aws/qa
+merged git merge origin/aws/dev
+git push
+
+git push origin aws/qa:aws/dev
+
+
+curl http://demo.squareops.xyz/?[1-10000]
+
+spec:
+  template:
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: failure-domain.beta.kubernetes.io/zone
+
+kubectl get deployments -o name | sed -e 's/.*\///g' | xargs -I {} kubectl patch deployment {} --patch "$(cat patch-file.yaml)"
+
+db_instance_endpoint = "sample-applicat.cnbwakbdzeez.us-east-2.rds.amazonaws.com:3306"
+db_instance_name = "nonproddb"
+db_parameter_group_id = "sample-applicat-20210706072817474100000001"
+db_subnet_group_id = "sample-applicat-20210706072818323300000003"
+ 
+
+kubectl --namespace=MY_NAMESPACE get hpa | awk '{print $1}' | xargs kubectl --namespace=MY_NAMESPACE delete hpa
+
+https://docs.mongodb.com/manual/core/databases-and-collections/
+
+https://www.tutorialspoint.com/mongodb/mongodb_create_database.htm
+
+
+
+psp enabled = false.
+ocCreateRoute: false
+rating service
+go_slow
+pem file
+
+
+
+helm apply ingress files.
+jenkins ci/cd with multiple branches
+
+s.TVENDDnX30ibSu1wKCDmsTyi.8GELF
+
+
+
+vault contain which secret-> mount secret in container,
+
+
+CMD export $(cat .env | grep -v "#" | xargs) && node server.js
+
+export $(cat vault/secrets/catalogue  | xargs) && node server.js
+
+private network in vault.
+helm chart upload in s3 and then used
+
+
+
+export VAULT_ADDR="https://vault-cluster.vault.1dae920c-4275-430a-8aeb-f250ba7e4f0c.aws.hashicorp.cloud:8200"; export VAULT_NAMESPACE="admin"
+
+export VAULT_TOKEN=s.yqe8jb0HwKkH7LCbNxh7Jhv0
+
+cat > values.yaml << EOF
+injector:
+   enabled: true
+   externalVaultAddr: "${VAULT_ADDR}"
+EOF
+
+helm install vault -f values.yaml hashicorp/vault --version "0.10.0"
+
+vault auth enable kubernetes
+
+
+vault write auth/kubernetes/role/app-role \
+   bound_service_account_names=app-secret \
+   bound_service_account_namespaces=roboot \
+   policies=catalogue-policy \
+   ttl=10h
+
+
+cat > catalogue-policy.hcl << EOF
+path "secret/catalogue-secret/*" {
+  capabilities = ["read"]
+}
+EOF
+
+vault policy write catalogue-policy catalogue-policy.hcl
+
+vault secrets enable -path=secret/ kv
+
+
+vault kv put secret/catalogue-secret/catalogue MONGO_URL=mongodb://root:admin12345@docdb-2021-07-13-13-03-21.cnbwakbdzeez.us-east-2.docdb.amazonaws.com:27017/catalogue?ssl=true&ssl_ca_certs=rds-combined-ca-bundle.pem&retryWrites=false
+
+
+cat /vault/secrets/catalogue
+
+node -r dotenv/config server.js dotenv_config_path=/home/catalogue
+
+cmd use instead of args 
+multiple variable passed
+
+
+export CATALOGUE_SERVER_PORT={{ .Data.CATALOGUE_SERVER_PORT }}
+
+
+https://comtechies.com/setup-vault-amazon-ec2-instance.html
+
+
+
+
+**----------------------------------------------------------------------------------------------------------**
+
+export VAULT_TOKEN=s.6zFGB8xNzCZwIjtjkOThg9oe
+
+export VAULT_ADDR="http://13.235.42.5:8200"
+
+
+
+cat > values.yaml << EOF
+injector:
+   enabled: true
+   externalVaultAddr: "${VAULT_ADDR}"
+EOF
+
+
+helm repo add hashicorp https://helm.releases.hashicorp.com && helm repo update
+
+helm install vault -f values.yaml hashicorp/vault --version "0.10.0"
+
+vault login
+
+vault auth enable kubernetes
+
+
+export TOKEN_REVIEW_JWT=$(kubectl get secret \
+   $(kubectl get serviceaccount vault -o jsonpath='{.secrets[0].name}') \
+   -o jsonpath='{ .data.token }' | base64 --decode)
+
+export KUBE_CA_CERT=$(kubectl get secret \
+   $(kubectl get serviceaccount vault -o jsonpath='{.secrets[0].name}') \
+   -o jsonpath='{ .data.ca\.crt }' | base64 --decode)
+
+export KUBE_HOST=$(kubectl config view --raw --minify --flatten \
+   -o jsonpath='{.clusters[].cluster.server}')
+
+vault write auth/kubernetes/config \
+   token_reviewer_jwt="$TOKEN_REVIEW_JWT" \
+   kubernetes_host="$KUBE_HOST" \
+   kubernetes_ca_cert="$KUBE_CA_CERT"
+
+vault write auth/kubernetes/role/app-role \
+   bound_service_account_names=app-secret \
+   bound_service_account_namespaces=roboot \
+   policies=catalogue-policy \
+   ttl=10h
+
+cat > catalogue-policy.hcl << EOF
+path "secret/catalogue-secret/*" {
+  capabilities = ["read"]
+}
+EOF
+
+vault policy write catalogue-policy catalogue-policy.hcl
+
+vault secrets enable -path=secret/ kv
+
+vault kv put secret/catalogue-secret/catalogue MONGO_URL=mongodb://root:admin12345@docdb-2021-07-13-13-03-21.cnbwakbdzeez.us-east-2.docdb.amazonaws.com:27017/catalogue?ssl=true&ssl_ca_certs=rds-combined-ca-bundle.pem&retryWrites=false
+
+cat /vault/secrets/catalogue
+
+
+
+   "client_id": "58a31654-bf7f-45db-aa7e-e33dfb179d3d",
+  "client_secret": "fy6X9avpkgWH.mOrduEZd6~b3Gb.tfMV.P",
+  "tenant_id": "79061fd6-8424-42f9-92e6-aed843caedcd"
+
+
+  
+az keyvault secret set --vault-name "cataloguekey" --name "catalogueport1" --value "8081"
+
+ az keyvault set-policy --name testrr --object-id 235b4119-b412-4365-9b99-8076aa6cf4ab --secret-permissions get
+
+
+order of deployement
+
+ecr automation is not
+
+pipeline 
+terraform automation db 
+acr
+remove configmap from helm chart
+
+
+  az mysql server vnet-rule create -g myResourceGroup -s myaksmysqldemoserver -n vnetRuleName --subnet /subscriptions/bf32e340-5493-4f67-bf07-a976e2fe49ff/resourceGroups/MC_myResourceGroup_myAKSCluster_eastus/providers/Microsoft.Network/virtualNetworks/aks-vnet-33876047/subnets/aks-subnet
+
+
+  az mysql server create --resource-group myResourceGroup --name myaksmysqldemoserver  --location eastus --admin-user myadmin --admin-password root@123 --sku-name GP_Gen5_2 
+
+
+   az network vnet subnet update -n MySubnet  --vnet-name MyVnet  -g demoResourceGroup --service-endpoints Microsoft.SQL
+
+mysqldump --databases cities > dump.sql
+
+az network vnet subnet update -n subnet-3  --vnet-name demo-infra-vnet  -g terraforminfraresourcegroup --se
+rvice-endpoints Microsoft.SQL
+
+
+readme update values.yaml with pvc and blackboxexporter.
+
+
+_1_bucket_region = "us-east-2"
+_2_bucket_name = "test-demo-aws-iaac-tf-421320058418"
+_3_dynamodb_table_name = "test-demo-aws-iaac-tf-lock-dynamodb-421320058418"
+
+
+EOT
+_1_region = "us-east-2"
+_2_vpc_id = "vpc-0af50cfcf26d85142"
+_3_vpc_cidr_block = "172.10.0.0/16"
+_4_public_subnets = [
+  "subnet-0b5fe175bab68118a",
+  "subnet-05209b94896684b02",
+  "subnet-0c7a9dc5cc8c72879",
+]
+_5_application_subnets = [
+  "subnet-0cfc18f97abb99ba8",
+  "subnet-05231c4d7ec54ea75",
+  "subnet-060a1f58a090c1702",
+]
+_6_database_subnets = [
+  "subnet-035a4cb1b4824e0b8",
+  "subnet-0ded8cd183a212040",
+  "subnet-091d012b030c7686f",
+]
+_7_bastion-host-public-ip = "13.59.66.111"
+_8_bastion_host_info_pem = "SAVE THIS FILE AS .pem FOR ACCESSING BASTION HOST"
+_9_local_file = ".-bastion_private_keypair.pem"
+
+
+
+
+_1_db_instance_endpoint = "sq-demo-sq-demo.cnbwakbdzeez.us-east-2.rds.amazonaws.com:3306"
+_2_db_instance_name = "nonproddb"
+_3_db_instance_username = "admin"
+_4_db_instance_password = "admin12345"
+_5_rds_dedicated_security_group = "sg-00f90b25a252b9a13"
+_6_db_parameter_group_id = "sq-demo-sq-demo-20210826072646047500000002"
+_7_db_subnet_group_id = "sq-demo-sq-demo-20210826072646050800000004"
+
+_1_cluster_endpoint = "sq-demo1-sq-demo120210826073941144300000002.cluster-cnbwakbdzeez.us-east-2.docdb.amazonaws.com"
+_2_reader_endpoint = "sq-demo1-sq-demo120210826073941144300000002.cluster-ro-cnbwakbdzeez.us-east-2.docdb.amazonaws.com"
+_3_id = "sq-demo1-sq-demo120210826073941144300000002"
+_4_hosted_zone_id = "Z7L8695A82IZ6"
+_5_master_username = "root"
+_6_master_password = "admin12345"
+_7_docdb_dedicated_security_group = "sg-02ea68822a2d7facd"
+
+
+
+mongodb://root:admin12345@sq-demo1-0.cnbwakbdzeez.us-east-2.docdb.amazonaws.com:27017/?ssl=true&ssl_ca_certs=rds-combined-ca-bundle.pem&retryWrites=false
+
+
+
+xAkMRB3_Hipqo6drp9D_
+
+113cc959e81f18b183cece6586b57014ee
+
+421320058418.dkr.ecr.us-east-2.amazonaws.com/jenkins-ci:dind
+
+demo1-sq-demo1
+
+
+demo purpose endpoint names.
+nodes uses 25% ram but it create more nodes 
+
+
+pkill -f locust.py
+
+default_node_pool.0.name must start with a lowercase letter, have max length of 12, and only have characters a-z0-9. Got "Infra".
+gpu quto increase
+
+
+
+jdbc:mysql://demo-sq-mysql.mysql.database.azure.com/cities?useSSL=false&autoReconnect=true
+
+
+"jdbc:mysql://demo-sq-mysql.mysql.database.azure.com:3306/cities?useSSL=true&requireSSL=false"; myDbConn = DriverManager.getConnection("jdbc:mysql://demo-sq-mysql.mysql.database.azure.com:3306/cities?useSSL=true&requireSSL=false", "sqladmin@demo-sq-mysql", root@123);
