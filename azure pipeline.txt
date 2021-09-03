@@ -740,8 +740,10 @@ default_node_pool.0.name must start with a lowercase letter, have max length of 
 gpu quto increase
 
 
-
-jdbc:mysql://demo-sq-mysql.mysql.database.azure.com/cities?useSSL=false&autoReconnect=true
-
-
-"jdbc:mysql://demo-sq-mysql.mysql.database.azure.com:3306/cities?useSSL=true&requireSSL=false"; myDbConn = DriverManager.getConnection("jdbc:mysql://demo-sq-mysql.mysql.database.azure.com:3306/cities?useSSL=true&requireSSL=false", "sqladmin@demo-sq-mysql", root@123);
+In ntework part we have only vnet not bastion host type
+subnet(In one subnet all things make and not require many subnet) or mysql concept (mysql/sql endpoint)
+resource group is mandetory to create in every step 
+mysql module not create password.
+network_policy = "calico" work with kubnet(pod traffic in or out)
+tfvars disscuss variable
+disscuss about readme point  "Got "Infra"" (according to name size, dash)
