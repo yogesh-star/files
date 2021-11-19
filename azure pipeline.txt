@@ -747,3 +747,14 @@ mysql module not create password.
 network_policy = "calico" work with kubnet(pod traffic in or out)
 tfvars disscuss variable
 disscuss about readme point  "Got "Infra"" (according to name size, dash)
+
+
+
+kubectl cp ingest-wp/wordpress-mysql-66fd58b87d-64hbj:/wordpress-dump.sql wordpress-dump.sql
+
+sed -i 's|http://qaptum.com|http://wp.qaptum.com|g' wordpress-dump.sql
+
+grep -c "qaptum.com" wordpress-dump.sql
+
+kubectl run -i -t --rm jump --image=quay.io/mhausenblas/jump:v0.1 -- sh
+
