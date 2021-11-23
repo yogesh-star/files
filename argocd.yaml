@@ -1,0 +1,51 @@
+image: docker:latest
+stages:
+  - build
+  - deploy
+
+build:
+  services:
+    - docker:19.03.12-dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  stage: build
+  script:
+    - docker login $ACR_REPOS -u $ACR_USERS -p $ACR_PASSS
+    - docker build -f Dockerfile -t $IMAGE_NAME:latest -t $ACR_REPOS/$IMAGE_NAMES:$CI_COMMIT_SHA .
+    - docker push $ACR_REPOS/$IMAGE_NAMES:$CI_COMMIT_SHA
+  only:
+    - dev
+
+deploy:
+  image: docker:latest
+  stage: deploy
+  script:
+    - apk add git curl
+    - git clone https://$GIT_USER:$GIT_TOKEN@gitlab.com/intuaition-3-0/devops.git
+    - git config --global user.email "yogesh@intuaition.com"
+    - git config --global user.name "intuaition-3-0"
+    - cd devops
+    - git checkout automation-dev
+    - sed -i "5d" apps/helm-charts/charts/ingest-bing/values.yaml
+    - sed -i "/image:/a \ \ \ \ tag:\ $CI_COMMIT_SHA" apps/helm-charts/charts/ingest-bing/values.yaml
+    - git add .; git commit -m '[skip ci] image update'; git push origin automation-dev
+  dependencies:
+    - build
+  only:
+    - dev
+
+
+
+# deploy:
+#   stage: deploy
+#   image: intuaitionyg268/az.kubectl:pipeline
+#   script:
+#     - az login --service-principal --username $AZ_USER --password $AZ_PASS --tenant $AZ_TENANT
+#     - az aks get-credentials --resource-group intuaition-non-prod-infra --name non-prod-intuaition-cluster --overwrite-existing
+#     - kubectl get po -A
+#     - kubectl --record deployment.apps/ingest-bing set image deployment.v1.apps/ingest-bing ingest-bing=qaptumtest.azurecr.io/ingest-bing:$CI_COMMIT_SHA -n dev
+#   dependencies:
+#     - build
+#   only:
+#     - dev
