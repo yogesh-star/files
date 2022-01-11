@@ -1,0 +1,116 @@
+
+
+#!/bin/bash
+
+RECIPIENTS="vardhan.sharma@wobot.ai"
+RESOURCE_GROUP=""
+VM_NAME=""
+
+az login --identity
+az vm start -g $RESOURCE_GROUP -n $VM_NAME
+sleep 5
+STATUS=$(az vm show -g $RESOURCE_GROUP -n $VM_NAME -d | grep powerState | awk '{print $3}')
+
+if [[ "$STATUS" =~ .*"running".*  ]]; then
+/usr/sbin/ssmtp -t << EOF
+To:$RECIPIENTS
+From:wobot.alerts
+Subject:VM $VM_NAME Started
+Content-Type: text/html;
+
+<h2>VM $VM_NAME  Started as per the schedule successfully</h2><br>
+
+
+
+Regards;<br>Wobot.ai
+
+EOF
+
+fi
+
+
+
+STOP_SCRIPT
+
+
+#!/bin/bash
+
+RECIPIENTS="vardhan.sharma@wobot.ai,"
+RESOURCE_GROUP=""
+VM_NAME=""
+
+
+az login --identity
+az vm stop -g $RESOURCE_GROUP -n $VM_NAME
+az vm deallocate -g $RESOURCE_GROUP -n $VM_NAME
+sleep 5
+STATUS=$(az vm show $RESOURCE_GROUP -n $VM_NAME -d | grep powerState | awk '{print $3}')
+
+if [[ "$STATUS" =~ .*"deallocated".*  ]]; then
+/usr/sbin/ssmtp -t << EOF
+To:$RECIPIENTS
+From:wobot.alerts
+Subject:VM $VM_NAME  Stopped
+Content-Type: text/html;
+
+<h2>VM $VM_NAME  Stopped as per the schedule successfully</h2><br>
+
+
+
+Regards;<br>Wobot.ai
+
+EOF
+
+fi
+
+
+
+
+DOC:
+
+
+
+1- Open your vm in dashboard, under settings click on identity. Switch Status to On.
+ 
+2- Click on Azure Role Assignments > Add Role Assignment > select Subscription in Scope > Contributor as Role > Save. 
+
+3- Update RECIPIENTS for sending mail in both scripts.
+
+4- Update your vm name and resource group in Scripts
+
+5- Place these scripts in vm which keeps running always. Copy the path of scripts.
+
+6- Run:
+
+```
+crontab -e
+
+#vm-stop-schedule
+0 1 * * 1-5  /bin/bash {PATH}/vm-stop.sh
+
+#vm-start-schedule
+30 15 * * 1-5  /bin/bash {PATH}/vm-start.sh
+
+```
+7- Update timings and days as per your requirement.
+
+8-  Run:
+
+```
+sudo apt-get update
+sudo apt-get install ssmtp
+nano /etc/ssmtp/ssmtp.conf
+
+```
+9- Add below content in ssmtp.conf after updating credentials.
+
+```
+root= {mail-id}
+mailhub=smtp.gmail.com:465
+rewriteDomain=gmail.com
+AuthUser={mail-id}}
+AuthPass={password}}
+FromLineOverride=YES
+UseTLS=YES
+
+```
