@@ -1,0 +1,92 @@
+pipeline {
+  environment {
+    DOCKER_REPO = "robootshop.azurecr.io/shipping"
+    dockerImage = "$DOCKER_REPO:$BUILD_NUMBER"
+    doError = '0'
+  }
+  agent {
+        kubernetes {
+          label 'Image build and scan'
+          defaultContainer 'dind'
+          yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: dind
+    image: public.ecr.aws/u3f4g5q8/azure-dind:latest
+    securityContext:
+      privileged: true
+    volumeMounts:
+      - name: dind-storage
+        mountPath: /var/lib/docker
+  volumes:
+    - name: dind-storage
+      emptyDir: {}
+"""
+}
+   }
+   stages {
+       stage('Building image') {
+      steps{
+        container('dind') {
+            sh """
+            docker build --network=host \
+            -t ${DOCKER_REPO}:${BUILD_NUMBER} -f Dockerfile .
+            """
+        }
+      }
+    }
+    stage('Scan Image') {
+          steps{
+            container('dind') {
+                sh """
+                   trivy image --ignore-unfixed -f json -o scan-report.json $dockerImage
+                """
+            }
+          }
+        }
+    stage('archive scan report') {
+      steps{
+        container('dind') {
+          archiveArtifacts artifacts: 'scan-report.json'
+        }
+      }
+    }
+    stage('check high and critical') {
+      steps{
+        container('dind') {
+          script {
+             high = sh (
+                  script: 'cat scan-report.json | jq \'.[].Vulnerabilities[].Severity\' | grep HIGH | wc -l',
+                  returnStdout: true
+             ).trim()
+             echo "High: ${high}"
+             
+            critical = sh (
+                  script: 'cat scan-report.json | jq \'.[].Vulnerabilities[].Severity\' | grep CRITICAL | wc -l',
+                  returnStdout: true
+             ).trim()
+             echo "Critical: ${critical}"
+             
+          }
+        }
+      }
+    }
+    stage('Deploy Image to Docker Registry') {
+      steps{
+        container('dind'){
+          script {
+            if ( "$high" < 100 && "$critical" < 100 ) {
+              withCredentials([azureServicePrincipal('azure-creds')]) {
+                    sh script: 'az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID'
+                    sh script: 'az acr login -n robootshop'
+                    sh script: 'docker push ${DOCKER_REPO}:${BUILD_NUMBER}'
+                }
+              }
+            }
+          }
+        }
+      }
+   }
+}
