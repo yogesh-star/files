@@ -758,3 +758,5 @@ grep -c "qaptum.com" wordpress-dump.sql
 
 kubectl run -i -t --rm jump --image=quay.io/mhausenblas/jump:v0.1 -- sh
 
+docker run -it --rm redislabs/redisearch:latest /bin/bash
+
